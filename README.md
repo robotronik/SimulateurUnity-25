@@ -11,7 +11,6 @@ Certaines de ces installations peuvent prendre du temps.
 
 ![completed install](docs/complete-install.png)
 
-
 ## Utilisation
 
 - Dans Unity, appuyer sur Ctrl+B pour lancer la simulation
@@ -19,6 +18,9 @@ Certaines de ces installations peuvent prendre du temps.
 
 ![le robot en action](docs/en-action.png)
 
+## Builder pour Android
+
+Pour générer un APK pour Android, il faut installer le module Android dans la configuration Build de Unity.
 
 
 
