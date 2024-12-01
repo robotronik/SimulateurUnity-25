@@ -34,7 +34,6 @@ public class GameManager : MonoBehaviour
     public GameObject Robot;
     Vector3 defaultRobotPos;
 
-    public List<SolarPanel> solarPanels;
     public List<Vector3> blueSquares;
     public List<Vector3> yellowSquares;
     public float squareRadius;
@@ -185,22 +184,6 @@ public class GameManager : MonoBehaviour
                         pts.yellow += 3;
                     }
                 }
-            }
-        }
-        foreach(SolarPanel panel in solarPanels)
-        {
-            switch(panel.state)
-            {
-                case SolarPanel.SolarPanelState.Yellow:
-                    pts.yellow += 5;
-                    break;
-                case SolarPanel.SolarPanelState.Blue:
-                    pts.blue += 5;
-                    break;
-                case SolarPanel.SolarPanelState.Both:
-                    pts.blue += 5;
-                    pts.yellow += 5;
-                    break;
             }
         }
         */
