@@ -9,8 +9,8 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
-[Oo]utput/
-[Aa]ndroid_output/
+/[Oo]utput/
+/[Aa]ndroid_output/
 
 .vsconfig
 
