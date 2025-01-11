@@ -2,6 +2,7 @@
   "dependencies": {
     "com.spoiledcat.git": "1.0.27",
     "com.unity.adaptiveperformance": "5.0.2",
+    "com.unity.adaptiveperformance.samsung.android": "5.0.0",
     "com.unity.collab-proxy": "2.0.7",
     "com.unity.device-simulator.devices": "1.0.0",
     "com.unity.feature.2d": "2.0.0",
