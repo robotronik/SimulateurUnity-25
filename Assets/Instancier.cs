@@ -27,6 +27,7 @@ public class Instancier : MonoBehaviour
         {
             Vector3 mirrorPos = t.position;
             mirrorPos.z *= -1;
+            bool vertical = t.rotation.eulerAngles.y % 180.0 != 0;
 
             for (int i = 0; i < 4; i++)
             {
@@ -34,23 +35,23 @@ public class Instancier : MonoBehaviour
                 float randomRotationY1 = UnityEngine.Random.Range(0f, 360f);
                 float randomRotationY2 = UnityEngine.Random.Range(0f, 360f);
 
-                GameObject column1 = Instantiate(ColumnPrefab, t.position + new Vector3(0, 0, i * 0.1f), Quaternion.Euler(0, randomRotationY1, 0), this.transform);
+                GameObject column1 = Instantiate(ColumnPrefab, t.position + new Vector3(vertical ? i * 0.1f : 0, 0, vertical ? 0 : i * 0.1f), Quaternion.Euler(0, randomRotationY1, 0), this.transform);
                 Columns.Add(column1);
 
-                GameObject column2 = Instantiate(ColumnPrefab, mirrorPos - new Vector3(0, 0, i * 0.1f), Quaternion.Euler(0, randomRotationY2, 0), this.transform);
+                GameObject column2 = Instantiate(ColumnPrefab, mirrorPos - new Vector3(vertical ? -i * 0.1f : 0, 0, vertical ? 0 : i * 0.1f), Quaternion.Euler(0, randomRotationY2, 0), this.transform);
                 Columns.Add(column2);
             }
 
-            GameObject platform1A = Instantiate(PlatformPrefab, t.position + new Vector3(0, 0.12f, 0.15f), Quaternion.Euler(0, 90, 0), this.transform);
+            GameObject platform1A = Instantiate(PlatformPrefab, t.position + new Vector3(vertical ? 0.15f : 0, 0.12f, vertical ? 0 : 0.15f), Quaternion.Euler(0, vertical ? 0 : 90, 0), this.transform);
             Platforms.Add(platform1A);
 
-            GameObject platform2A = Instantiate(PlatformPrefab, mirrorPos + new Vector3(0, 0.12f, -0.15f), Quaternion.Euler(0, 90, 0), this.transform);
+            GameObject platform2A = Instantiate(PlatformPrefab, mirrorPos + new Vector3(vertical ? 0.15f : 0, 0.12f, vertical ? 0 : -0.15f), Quaternion.Euler(0, vertical ? 0 : 90, 0), this.transform);
             Platforms.Add(platform2A);
 
-            GameObject platform1B = Instantiate(PlatformPrefab, t.position + new Vector3(0, 0.135f, 0.15f), Quaternion.Euler(0, 90, 0), this.transform);
+            GameObject platform1B = Instantiate(PlatformPrefab, t.position + new Vector3(vertical ? 0.15f : 0, 0.135f, vertical ? 0 : 0.15f), Quaternion.Euler(0, vertical ? 0 : 90, 0), this.transform);
             Platforms.Add(platform1B);
 
-            GameObject platform2B = Instantiate(PlatformPrefab, mirrorPos + new Vector3(0, 0.135f, -0.15f), Quaternion.Euler(0, 90, 0), this.transform);
+            GameObject platform2B = Instantiate(PlatformPrefab, mirrorPos + new Vector3(vertical ? 0.15f : 0, 0.135f, vertical ? 0 : -0.15f), Quaternion.Euler(0, vertical ? 0 : 90, 0), this.transform);
             Platforms.Add(platform2B);
         }
 

@@ -11,8 +11,6 @@ public class Robot : MonoBehaviour
     public float angSpeed = 0.5f;
     Rigidbody rb;
 
-    public SerialCommunication comm;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -38,9 +36,9 @@ public class Robot : MonoBehaviour
     {
         if (!rb.isKinematic)
         {
-            angularSpeed = comm.keys.Joystick2_X * angSpeed;
-            robotSpeed.y = comm.keys.Joystick1_Y;
-            robotSpeed.x = comm.keys.Joystick1_X;
+            //angularSpeed = comm.keys.Joystick2_X * angSpeed;
+            //robotSpeed.y = comm.keys.Joystick1_Y;
+            //robotSpeed.x = comm.keys.Joystick1_X;
             float sped = Mathf.Clamp01(robotSpeed.sqrMagnitude) * speed;
             float ang = Mathf.Atan2(robotSpeed.y, robotSpeed.x);
 

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System.Drawing.Printing;
 using System;
 
 public struct KeyStruct
@@ -42,7 +41,6 @@ public struct KeyStruct
 }
 public class keysDisplay : MonoBehaviour
 {
-    public SerialCommunication serialComm;
     public TextMeshProUGUI keys;
 
     // Start is called before the first frame update
@@ -54,6 +52,6 @@ public class keysDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        keys.text = serialComm.keys.ToString();
+        //keys.text = serialComm.keys.ToString();
     }
 }
