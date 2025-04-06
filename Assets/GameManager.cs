@@ -10,35 +10,27 @@ using UnityEngine.UI;
 
 public enum Team
 {
+    none,
     blue,
     yellow
 }
-public struct gamePoints
-{
-    public short blue;
-    public short yellow;
-}
 public class GameManager : MonoBehaviour
 {
-    public Instancier instancier;
-    public Recorder recorder;
     public Volume volume;
     public TMP_Dropdown qualityDropdown;
     public Toggle visualEffectsToggle;
 
     public GameObject Camera;
-    Vector3 defaultCamPos;
 
     [SerializeField] public Team team;
 
     public GameObject Robot;
-    Vector3 defaultRobotPos;
 
     public List<Vector3> blueSquares;
     public List<Vector3> yellowSquares;
     public float squareRadius;
     public float plantRadius;
-    public gamePoints points;
+    public int points;
     [SerializeField] TextMeshProUGUI bluePointsText;
     [SerializeField] TextMeshProUGUI yellowPointsText;
     [SerializeField] TextMeshProUGUI timerText;
@@ -53,9 +45,6 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        defaultCamPos = Camera.transform.position;
-        defaultRobotPos = Robot.transform.position;
-
         qualityDropdown.value = QualitySettings.GetQualityLevel();
         visualEffectsToggle.isOn = true;
 
@@ -95,20 +84,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        points = CalculateGamePoints();
-        bluePointsText.text = points.blue.ToString();
-        yellowPointsText.text = points.yellow.ToString();
-        gameTime += Time.deltaTime * Time.timeScale;
+        // points = CalculateGamePoints();
+        // bluePointsText.text = points.blue.ToString();
+        // yellowPointsText.text = points.yellow.ToString();
+        // gameTime += Time.deltaTime * Time.timeScale;
         timerText.text = FormatTime(gameTime);
-    }
-    public KeyStruct FromTouchControls()
-    {
-        KeyStruct keys = new();
-        keys.Joystick1_X = joystick1.Horizontal;
-        keys.Joystick1_Y = joystick1.Vertical;
-        keys.Joystick2_X = joystick2.Horizontal;
-        keys.Joystick2_Y = joystick2.Vertical;
-        return keys;
     }
     static string FormatTime(float timeInSeconds)
     {
@@ -119,75 +99,6 @@ public class GameManager : MonoBehaviour
         string formattedTime = string.Format("{0:0}:{1:00}.{2:0}", timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds/100);
 
         return formattedTime;
-    }
-
-    public void ResetScene()
-    {
-        if (!recorder.isRec && !recorder.isPlay)
-        {
-            instancier.deleteObjects();
-            instancier.setupScene();
-            gameTime = 0;
-        }
-    }
-    public void PublicSwitchTeam()
-    {
-        SwitchTeam(team == Team.blue ? Team.yellow : Team.blue);
-    }
-    void SwitchTeam(Team newTeam)
-    {
-        team = newTeam;
-        float inv = (newTeam == Team.blue) ? 1 : -1;
-
-        Vector3 camVec = defaultCamPos;
-        camVec.z *= inv;
-        Camera.transform.position = camVec;
-
-        Vector3 robVec = defaultRobotPos;
-        robVec.z *= inv;
-        Robot.transform.position = robVec;
-
-        Camera.GetComponent<CamFollower>().ResetRotation();
-    }
-    public gamePoints CalculateGamePoints()
-    {
-        gamePoints pts = new()
-        {
-            blue = 0,
-            yellow = 0
-        };
-        /*
-        foreach(GameObject plant in instancier.Plants)
-        {
-            Vector3 forward = plant.transform.up;
-
-            // Define the up vector
-            Vector3 up = Vector3.up;
-
-            float angle = Vector3.Angle(up, forward);
-
-            if (angle < 20f)
-            {
-                foreach (Vector3 pos in blueSquares)
-                {
-                    Vector3 localPos = plant.transform.position - pos;
-                    if (Mathf.Abs(localPos.x) < squareRadius + plantRadius && Mathf.Abs(localPos.z) < squareRadius + plantRadius)
-                    {
-                        pts.blue += 3;
-                    }
-                }
-                foreach (Vector3 pos in yellowSquares)
-                {
-                    Vector3 localPos = plant.transform.position - pos;
-                    if (Mathf.Abs(localPos.x) < squareRadius + plantRadius && Mathf.Abs(localPos.z) < squareRadius + plantRadius)
-                    {
-                        pts.yellow += 3;
-                    }
-                }
-            }
-        }
-        */
-        return pts;
     }
     public void VisualEffectsChange(bool isOn)
     {

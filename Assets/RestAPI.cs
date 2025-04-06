@@ -14,6 +14,12 @@ public struct Pos
     public int y { get; set; }
     public int theta { get; set; }
 }
+// Define a wrapper class to match the JSON structure
+[System.Serializable]
+private class Wrapper
+{
+    public Pos pos;
+}
 public class RestAPI : MonoBehaviour
 {
     private static readonly HttpClient client = new HttpClient();
@@ -21,30 +27,46 @@ public class RestAPI : MonoBehaviour
     [SerializeField] private string port = "8080";
     private bool isFetching = false;
     public bool valid;
+
+    public Pos robotPos;
+
     void Start(){}
     void Update(){
+    }
+    void FixedUpdate()
+    {
         if (!isFetching)
         {
             isFetching = true;
             _ = FetchData(); // Fire and forget, but track with isFetching
         }
     }
-    void FixedUpdate()
-    {}
 
     private async Task FetchData()
     {
-        string url = $"http://{ip}:{port}/position";
+        string url = $"http://{ip}:{port}/get_pos";
         Debug.Log($"Fetching data at {url} ...");
         try
         {
             HttpResponseMessage response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
             string jsonResponse = await response.Content.ReadAsStringAsync();
-            Pos pos = JsonUtility.FromJson<Pos>(jsonResponse);
+            // Response looks like
+            /*
+                {
+                    "pos": 
+                    {
+                        "theta": 15,
+                        "x": 100,
+                        "y": 100
+                    }
+                }
+            */
+            var jsonObject = JsonUtility.FromJson<Wrapper>(jsonResponse);
+            robotPos = jsonObject.pos;
             // Use Main Thread for Unity operations if needed
             // await UnityMainThreadDispatcher.Instance.EnqueueAsync(() => UpdatePosition(pos));
-            Debug.Log($"Position: x={pos.x}, y={pos.y}, theta={pos.theta}");
+            Debug.Log($"Position: x={robotPos.x}, y={robotPos.y}, theta={robotPos.theta}");
             valid = true;
         }
         catch (Exception ex)
