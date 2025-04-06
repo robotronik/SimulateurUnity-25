@@ -5,6 +5,7 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine.UIElements;
 
 // Define the structure to parse JSON response
 [System.Serializable]
@@ -14,14 +15,42 @@ public struct Pos
     public int y { get; set; }
     public int theta { get; set; }
 }
-// Define a wrapper class to match the JSON structure
 [System.Serializable]
-private class Wrapper
+public struct tableState_t
 {
-    public Pos pos;
+    public Pos pos_opponent;
+    public ulong startTime;
+    public robot_t robot;
+
+    public int strategy;
+
+    public List<bool> avail_stocks;
+    public bool done_banderole;
+    public List<int> builtTribuneHeights;
 }
+[System.Serializable]
+public struct robot_t
+{
+    public int colorTeam;
+    public Pos pos;
+    public Pos target;
+    public double vit_x, vit_y;
+    public int braking_distance;
+    public int direction_side;
+    public int plank_count;
+}
+
 public class RestAPI : MonoBehaviour
 {
+    public class Wrapper
+    {
+        public int status;
+        public tableState_t table;
+        public int score;
+        public List<Pos> lidar;
+        public List<Pos> navigation;
+    }
+
     private static readonly HttpClient client = new HttpClient();
     [SerializeField] private string ip = "127.0.0.1";
     [SerializeField] private string port = "8080";
@@ -29,6 +58,8 @@ public class RestAPI : MonoBehaviour
     public bool valid;
 
     public Pos robotPos;
+
+    public Wrapper global;
 
     void Start(){}
     void Update(){
@@ -51,19 +82,8 @@ public class RestAPI : MonoBehaviour
             HttpResponseMessage response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
             string jsonResponse = await response.Content.ReadAsStringAsync();
-            // Response looks like
-            /*
-                {
-                    "pos": 
-                    {
-                        "theta": 15,
-                        "x": 100,
-                        "y": 100
-                    }
-                }
-            */
-            var jsonObject = JsonUtility.FromJson<Wrapper>(jsonResponse);
-            robotPos = jsonObject.pos;
+            global = JsonUtility.FromJson<Wrapper>(jsonResponse);
+            robotPos = global.table.robot.pos;
             // Use Main Thread for Unity operations if needed
             // await UnityMainThreadDispatcher.Instance.EnqueueAsync(() => UpdatePosition(pos));
             Debug.Log($"Position: x={robotPos.x}, y={robotPos.y}, theta={robotPos.theta}");
