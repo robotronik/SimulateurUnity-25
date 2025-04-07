@@ -11,9 +11,9 @@ using UnityEngine.UIElements;
 [System.Serializable]
 public struct Pos
 {
-    public int x { get; set; }
-    public int y { get; set; }
-    public int theta { get; set; }
+    public int x;
+    public int y;
+    public int theta;
 }
 [System.Serializable]
 public struct tableState_t
@@ -42,6 +42,7 @@ public struct robot_t
 
 public class RestAPI : MonoBehaviour
 {
+    [System.Serializable]
     public class Wrapper
     {
         public int status;
@@ -59,7 +60,7 @@ public class RestAPI : MonoBehaviour
 
     public Pos robotPos;
 
-    public Wrapper global;
+    [SerializeField] public Wrapper global;
 
     void Start(){}
     void Update(){
@@ -75,7 +76,7 @@ public class RestAPI : MonoBehaviour
 
     private async Task FetchData()
     {
-        string url = $"http://{ip}:{port}/get_pos";
+        string url = $"http://{ip}:{port}/get_global";
         Debug.Log($"Fetching data at {url} ...");
         try
         {
@@ -83,6 +84,12 @@ public class RestAPI : MonoBehaviour
             response.EnsureSuccessStatusCode();
             string jsonResponse = await response.Content.ReadAsStringAsync();
             global = JsonUtility.FromJson<Wrapper>(jsonResponse);
+            // Debug.Log($"Response: {jsonResponse}");
+            // Parse the JSON response
+            // Assuming the JSON structure matches the Wrapper class
+            // You can access the data like this:
+            // int status = global.status;
+            Debug.Log($"Status: {global.status}");
             robotPos = global.table.robot.pos;
             // Use Main Thread for Unity operations if needed
             // await UnityMainThreadDispatcher.Instance.EnqueueAsync(() => UpdatePosition(pos));

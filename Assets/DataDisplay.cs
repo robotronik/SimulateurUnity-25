@@ -32,7 +32,7 @@ public class DataDisplay : MonoBehaviour
         foreach (Pos p in restAPI.global.lidar)
         {
             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            go.transform.position = new Vector3(p.x, 0.35f, p.y);
+            go.transform.position = new Vector3((float)(p.x)/1000f, 0.35f, (float)(p.y)/1000f);
             go.transform.localScale = new Vector3(0.02f, 0.1f, 0.02f);
             lidarPoints.Add(go);
         }
